@@ -2,7 +2,7 @@ import {container} from '@teqfw/test';
 import assert from 'assert';
 
 // GET OBJECT FROM CONTAINER
-container.setDebug(true);
+container.setDebug(false);
 /**
  * Request the original ID from the container.
  * @type {GptUser_Shared_Di_Proxy_SignUp_Init}

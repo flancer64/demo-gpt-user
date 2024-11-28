@@ -153,7 +153,7 @@ export default class GptUser_Back_Mod_User {
                     result = convUser.db2dom({dbUser});
                     logger.info(`User read successfully with ID: ${result.id}`);
                 } else {
-                    logger.info(`User not found with ID/Name: ${id ?? ''}/${name ?? ''}`);
+                    logger.info(`User not found with ID: ${id ?? ''}`);
                 }
                 if (!trx) await trxLocal.commit();
             } catch (error) {

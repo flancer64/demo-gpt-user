@@ -89,7 +89,7 @@ describe('010: User Sign Up', () => {
         const tokens = await modToken.list({});
         const [token] = tokens;
         assert.ok(token, 'Verification token should exist');
-        assert.strictEqual(token.user_ref, USER_ID, 'Token should belong to the registered user');
+        assert.strictEqual(token.userRef, USER_ID, 'Token should belong to the registered user');
         assert.strictEqual(token.type, TOKEN_TYPE.EMAIL_VERIFICATION, 'Token type should be EMAIL_VERIFICATION');
         TOKEN_CODE = token.code;
     });
