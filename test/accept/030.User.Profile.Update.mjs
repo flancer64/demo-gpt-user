@@ -11,8 +11,9 @@ const {
 const BEARER = process.env.AUTH_TOKEN ?? 'test-token';
 const EMAIL = process.env.EMAIL ?? 'user@any.domain.in.tld';
 const LOCALE = 'lv-LV';
-const NEW_LOCALE = 'en-US';
 const NAME = 'Alex Gusev';
+const NEW_LOCALE = 'en-US';
+const NEW_NAME = 'Test User';
 const NEW_PASS_PHRASE = 'new password';
 
 // SETUP CONTAINER
@@ -20,6 +21,8 @@ const container = await createContainer();
 await initConfig(container);
 
 // SETUP ENVIRONMENT
+/** @type {GptUser_Back_Mod_User} */
+const modUserApp = await container.get('GptUser_Back_Mod_User$');
 /** @type {Fl64_Gpt_User_Back_Mod_User} */
 const modUserPlugin = await container.get('Fl64_Gpt_User_Back_Mod_User$');
 /** @type {Fl64_Gpt_User_Back_Mod_Token} */
@@ -69,6 +72,9 @@ describe('030: User Profile Update', () => {
         dto.status = 'ACTIVE';
         const createdUser = await modUserPlugin.create({dto});
         USER_ID = createdUser.userRef;
+        const userApp = await modUserApp.read({id: USER_ID});
+        userApp.name = NAME;
+        await modUserApp.update({dto: userApp});
     });
 
     after(async () => {
@@ -103,6 +109,8 @@ describe('030: User Profile Update', () => {
     it('should load user profile data with a valid token', async () => {
         const req = endpointLoad.createReq();
         req.token = TOKEN_CODE;
+        // noinspection JSValidateTypes
+        /** @type {GptUser_Shared_Di_Proxy_Update_Load.Response} */
         const res = endpointLoad.createRes();
 
         await serviceLoad.process(req, res, null);
@@ -110,28 +118,32 @@ describe('030: User Profile Update', () => {
         assert.strictEqual(res.resultCode, RES_LOAD.SUCCESS, 'Profile data loading should succeed');
         assert.strictEqual(res.email, EMAIL, 'Loaded email should match the user data');
         assert.strictEqual(res.locale, LOCALE, 'Loaded locale should match the user data');
+        assert.strictEqual(res.name, NAME, 'Loaded name should match the user data');
     });
 
     it('should update user profile with a valid token', async () => {
         const req = endpointSave.createReq();
-        req.token = TOKEN_CODE;
         req.locale = NEW_LOCALE;
+        req.name = NEW_NAME;
         req.passphrase = NEW_PASS_PHRASE;
+        req.token = TOKEN_CODE;
         const res = endpointSave.createRes();
 
         await serviceSave.process(req, res, null);
 
         assert.strictEqual(res.resultCode, RES_SAVE.SUCCESS, 'Profile update should succeed');
 
-        const updatedUser = await modUserPlugin.read({userRef: USER_ID});
-        assert.strictEqual(updatedUser.locale, NEW_LOCALE, 'Updated locale should match the new value');
+        const updatedUserPlugin = await modUserPlugin.read({userRef: USER_ID});
+        assert.strictEqual(updatedUserPlugin.locale, NEW_LOCALE, 'Updated locale should match the new value');
         assert.ok(
             modUserPlugin.hashPassPhrase({
                 passPhrase: NEW_PASS_PHRASE,
-                salt: updatedUser.passSalt,
-            }) === updatedUser.passHash,
+                salt: updatedUserPlugin.passSalt,
+            }) === updatedUserPlugin.passHash,
             'Updated passphrase should match the hashed value'
         );
+        const updatedUserApp = await modUserApp.read({id: USER_ID});
+        assert.strictEqual(updatedUserApp.name, NEW_NAME, 'Updated name should match the new value');
 
         const token = await modToken.read({code: TOKEN_CODE});
         assert.strictEqual(token, null, 'Token should be deleted after successful profile update');

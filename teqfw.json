@@ -7,10 +7,14 @@
     "proxy": {
       "back": {
         "Fl64_Gpt_User_Back_Mod_User": "GptUser_Back_Di_Proxy_Mod_User",
-        "Fl64_Gpt_User_Back_Web_Api_SignUp_Init": "GptUser_Back_Di_Proxy_Web_Api_SignUp_Init"
+        "Fl64_Gpt_User_Back_Web_Api_SignUp_Init": "GptUser_Back_Di_Proxy_Web_Api_SignUp_Init",
+        "Fl64_Gpt_User_Back_Web_Api_Update_Load": "GptUser_Back_Di_Proxy_Web_Api_Update_Load",
+        "Fl64_Gpt_User_Back_Web_Api_Update_Save": "GptUser_Back_Di_Proxy_Web_Api_Update_Save"
       },
       "shared": {
-        "Fl64_Gpt_User_Shared_Web_Api_SignUp_Init": "GptUser_Shared_Di_Proxy_SignUp_Init"
+        "Fl64_Gpt_User_Shared_Web_Api_SignUp_Init": "GptUser_Shared_Di_Proxy_SignUp_Init",
+        "Fl64_Gpt_User_Shared_Web_Api_Update_Load": "GptUser_Shared_Di_Proxy_Update_Load",
+        "Fl64_Gpt_User_Shared_Web_Api_Update_Save": "GptUser_Shared_Di_Proxy_Update_Save"
       }
     }
   }
