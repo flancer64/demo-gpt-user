@@ -1,0 +1,41 @@
+{
+  "name": "@flancer64/demo-gpt-user",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Demonstrates a user registration workflow in an external system via ChatGPT custom actions.",
+  "homepage": "https://github.com/flancer64/demo-gpt-user/",
+  "bugs": {
+    "url": "https://github.com/flancer64/demo-gpt-user/issues",
+    "email": "alex@flancer64.com"
+  },
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Alex Gusev",
+    "email": "alex@flancer64.com",
+    "url": "https://github.com/flancer64"
+  },
+  "repository": "github:flancer64/demo-gpt-user",
+  "scripts": {
+    "db-init": "node ./bin/tequila.mjs db-init",
+    "db-reset": "node ./bin/tequila.mjs db-export -f ./var/data.json && node ./bin/tequila.mjs db-init && node ./bin/tequila.mjs db-import -f ./var/data.json ",
+    "help": "node ./bin/tequila.mjs -h",
+    "start": "node ./bin/tequila.mjs web-server-start",
+    "stop": "node ./bin/tequila.mjs web-server-stop",
+    "test:accept": "mocha ./test/accept --recursive",
+    "test:unit": "mocha ./test/unit --recursive",
+    "version": "node ./bin/tequila.mjs core-version"
+  },
+  "dependencies": {
+    "@flancer64/gpt-user-auth": "git+ssh://git@github.com:flancer64/gpt-user-auth.git",
+    "better-sqlite3": "^11.5.0",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@teqfw/core": "github:teqfw/core#main",
+    "@teqfw/db": "github:teqfw/db#main",
+    "@teqfw/email": "github:teqfw/email#main",
+    "@teqfw/test": "github:teqfw/test#main",
+    "dotenv": "latest",
+    "mocha": "github:mochajs/mocha"
+  }
+}

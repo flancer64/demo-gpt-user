@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .email-header {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .email-body {
+            font-size: 16px;
+        }
+
+        .email-footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="email-header">
+        Уважаемый пользователь,
+    </div>
+    <div class="email-body">
+        <p>Спасибо за регистрацию в нашем сервисе! Чтобы завершить регистрацию и активировать ваш аккаунт, пожалуйста,
+            подтвердите ваш адрес электронной почты, кликнув по ссылке ниже:</p>
+        <p><a href="{{verify_link}}" target="_blank">{{verify_link}}</a></p>
+        <p>Если ссылка выше не работает, скопируйте и вставьте её в адресную строку вашего браузера.</p>
+        <p>Обратите внимание: Срок действия этой ссылки для подтверждения истекает через 24 часа.</p>
+        <p>Если вы не инициировали эту регистрацию, просто проигнорируйте это письмо.</p>
+    </div>
+    <div class="email-footer">
+        С наилучшими пожеланиями,<br>
+        Команда поддержки
+    </div>
+</div>
+</body>
+</html>

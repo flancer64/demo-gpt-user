@@ -1,0 +1,8 @@
+{
+  "subject": "Please Verify Your Email Address",
+  "description": "This email is sent to users who have registered for the service. It contains a verification link to confirm their email address and complete the registration process. The link is valid for a limited time.",
+  "variables": [
+    "verify_link"
+  ],
+  "language": "en"
+}

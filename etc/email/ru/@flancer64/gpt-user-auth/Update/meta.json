@@ -1,0 +1,9 @@
+{
+  "subject": "Profile Update Link",
+  "description": "An email sent to the user containing a link to edit their profile.",
+  "variables": [
+    "edit_link"
+  ],
+  "language": "en",
+  "format": "text"
+}

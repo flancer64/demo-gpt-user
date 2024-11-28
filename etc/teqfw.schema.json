@@ -1,0 +1,17 @@
+{
+  "entity": {
+    "user": {
+      "comment": "Registry of application users.",
+      "attr": {
+        "id": {
+          "type": "id",
+          "comment": "Unique identifier for the user. This field is auto-incremented."
+        },
+        "name": {
+          "type": "string",
+          "comment": "The name of the user."
+        }
+      }
+    }
+  }
+}

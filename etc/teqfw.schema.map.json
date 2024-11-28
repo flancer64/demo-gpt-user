@@ -1,0 +1,13 @@
+{
+  "deprecated": {},
+  "ref": {
+    "@flancer64/gpt-user-auth": {
+      "/user": {
+        "path": "/user",
+        "attrs": {
+          "id": "id"
+        }
+      }
+    }
+  }
+}

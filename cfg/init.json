@@ -1,0 +1,30 @@
+{
+  "@teqfw/db": {
+    "client": "better-sqlite3",
+    "connection": {
+      "filename": "/full/path/to/var/db.sqlite3"
+    },
+    "useNullAsDefault": true
+  },
+  "@teqfw/email": {
+    "auth": {
+      "pass": "...",
+      "user": "...@gmail.com"
+    },
+    "from": "Desk Mailer <...@gmail.com>",
+    "host": "smtp.gmail.com",
+    "port": 465,
+    "secure": true
+  },
+  "@teqfw/web": {
+    "server": {
+      "port": 8080,
+      "useHttp1": true,
+      "useWebSocket": false
+    },
+    "urlBase": "app.domain.com"
+  },
+  "@flancer64/gpt-user-auth": {
+    "authBearerTokens": ["List of Bearer tokens for API authentication."]
+  }
+}

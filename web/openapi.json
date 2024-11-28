@@ -1,0 +1,271 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ChatGPT User Interaction API",
+    "description": "An API enabling seamless user registration, credential recovery, and interaction management through ChatGPT.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://YOUR_SERVER_HERE/"
+    }
+  ],
+  "paths": {
+    "/web-api-service/Fl64_Gpt_User_Shared_Web_Api_SignUp_Init": {
+      "post": {
+        "summary": "Initialize user sign-up",
+        "description": "Initiates the user sign-up process by collecting the user's email, consent for data processing, and a secret passphrase. Creates a user account with a 'pending verification' status and generates a PIN code. The account becomes active after email verification.",
+        "operationId": "userSignUpInit",
+        "requestBody": {
+          "description": "Data required to initialize the user sign-up process. The provided email will be used for verification and communication. Consent is mandatory to proceed, and the secret passphrase will serve as a personal authentication token alongside the PIN code.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "The user's email address. This is required for sending the verification token and for communication regarding the account. It must be a valid email format (e.g., user@example.com).",
+                    "format": "email"
+                  },
+                  "isConsent": {
+                    "type": "boolean",
+                    "description": "A flag indicating whether the user has agreed to data processing as per legal requirements. This consent must be true to proceed with registration.",
+                    "example": true
+                  },
+                  "locale": {
+                    "type": "string",
+                    "description": "User's preferred locale for interactions with the application. Must follow BCP 47 language tags.",
+                    "example": "en-US"
+                  },
+                  "passPhrase": {
+                    "type": "string",
+                    "description": "A secret passphrase chosen by the user. This passphrase will be required in combination with the PIN code for secure authentication in future interactions. The passphrase should be easy for the user to remember and spell, especially in voice-driven interfaces.",
+                    "minLength": 8,
+                    "maxLength": 128,
+                    "example": "sunny day morning"
+                  }
+                },
+                "required": ["email", "isConsent", "passPhrase"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sign-up initiation was successful. The response includes a unique PIN code (inactive until email verification is completed) and user instructions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultCode": {
+                      "type": "string",
+                      "enum": [
+                        "CONSENT_REQUIRED",
+                        "EMAIL_ALREADY_REGISTERED",
+                        "SERVER_ERROR",
+                        "SUCCESS"
+                      ],
+                      "description": "Indicates the result of the operation. Possible values are: CONSENT_REQUIRED, EMAIL_ALREADY_REGISTERED, SERVER_ERROR, SUCCESS."
+                    },
+                    "pin": {
+                      "type": "integer",
+                      "description": "A unique 4-6 digit numeric code assigned to the user as their identifier. The PIN code remains inactive until the user verifies their email. This code should be retained by the user for future interactions.",
+                      "example": 123456
+                    },
+                    "instructions": {
+                      "type": "string",
+                      "description": "A detailed message instructing the user on the next steps to complete their registration. This includes verifying their email by following the link sent to their email address.",
+                      "example": "Please verify your email address by clicking the link we sent to your email."
+                    }
+                  },
+                  "required": ["resultCode", "pin", "instructions"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error. An unexpected issue occurred while processing the request. The user should be advised to try again later.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "A general error message indicating that the service is temporarily unavailable.",
+                      "example": "Service unavailable. Please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/web-api-service/Fl64_Gpt_User_Shared_Web_Api_Test_Email": {
+      "post": {
+        "summary": "Send a message to the user's registered email",
+        "description": "Allows sending a message to the email registered with the user's account. Requires the user's PIN, passphrase for authentication, and an optional message and subject for the email.",
+        "operationId": "sendEmail",
+        "requestBody": {
+          "description": "Data required to send an email to the registered user.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pin": {
+                    "type": "integer",
+                    "description": "The user's unique PIN for authentication."
+                  },
+                  "passPhrase": {
+                    "type": "string",
+                    "description": "The user's secret passphrase for authentication."
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "The subject of the email. This field is optional and can be empty."
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "The body of the email. This field is optional and can be empty."
+                  }
+                },
+                "required": ["pin", "passPhrase"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The email was sent successfully or failed with an appropriate error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultCode": {
+                      "type": "string",
+                      "enum": [
+                        "UNAUTHENTICATED",
+                        "SERVICE_ERROR",
+                        "SUCCESS"
+                      ],
+                      "description": "Indicates the result of the operation. Possible values are: UNAUTHENTICATED, SERVICE_ERROR, SUCCESS."
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "A detailed message describing the result of the operation."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error. An unexpected issue occurred while processing the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "A general error message indicating that the service is temporarily unavailable."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/web-api-service/Fl64_Gpt_User_Shared_Web_Api_Update_Init": {
+      "post": {
+        "operationId": "initiateProfileEditing",
+        "summary": "Initiate Profile Editing Process",
+        "description": "Initiates the profile editing process by validating the provided email or PIN and sending a link for profile editing to the user's email.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The email address associated with the user's account. This is one of the possible identifiers for the profile editing request.",
+                    "example": "user@example.com"
+                  },
+                  "pin": {
+                    "type": "integer",
+                    "description": "A unique PIN assigned to the user during registration. This serves as a numeric identifier for the user's account.",
+                    "example": 123456
+                  }
+                },
+                "required": ["email", "pin"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The profile editing process was successfully initiated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "instructions": {
+                      "type": "string",
+                      "description": "A human-readable message describing the outcome of the profile editing initiation process. This helps the application or the user understand the result of the operation.",
+                      "example": "The profile editing link was successfully sent to the user's registered email address."
+                    },
+                    "resultCode": {
+                      "type": "string",
+                      "description": "A code indicating the result of the profile editing initiation operation. It can be used programmatically to determine success or failure.",
+                      "enum": ["SERVER_ERROR", "SUCCESS"],
+                      "example": "SUCCESS"
+                    }
+                  },
+                  "required": ["instructions", "resultCode"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unexpected server error occurred during the profile editing initiation process.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "instructions": {
+                      "type": "string",
+                      "description": "A human-readable message indicating that an error occurred during the process.",
+                      "example": "An unexpected server error occurred. Please try again later."
+                    },
+                    "resultCode": {
+                      "type": "string",
+                      "description": "A code indicating that a server error occurred.",
+                      "enum": ["SERVER_ERROR"],
+                      "example": "SERVER_ERROR"
+                    }
+                  },
+                  "required": ["instructions", "resultCode"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
