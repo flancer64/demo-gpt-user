@@ -42,6 +42,9 @@ let serviceVerify = await container.get('Fl64_Gpt_User_Back_Web_Api_SignUp_Verif
 let endpointVerify = await container.get('Fl64_Gpt_User_Shared_Web_Api_SignUp_Verify$');
 const RES_VERIFY = endpointVerify.getResultCodes();
 
+/** @type {TeqFw_Email_Back_Act_Send} */
+const actSend = await container.get('TeqFw_Email_Back_Act_Send$');
+
 let USER_ID, TOKEN_CODE;
 
 describe('010: User Sign Up', () => {
@@ -73,6 +76,14 @@ describe('010: User Sign Up', () => {
         req.passPhrase = PASS_PHRASE;
 
         const res = endpointInit.createRes();
+
+        // Mock email sending action
+        const sendEmailStub = actSend.act;
+        actSend.act = async ({to}) => {
+            assert.strictEqual(to, EMAIL, 'Email recipient should match');
+            return {success: true};
+        };
+
         await serviceInit.process(req, res, context);
 
         assert.strictEqual(res.resultCode, RES_INIT.SUCCESS, 'Registration should complete successfully');
@@ -92,6 +103,9 @@ describe('010: User Sign Up', () => {
         assert.strictEqual(token.userRef, USER_ID, 'Token should belong to the registered user');
         assert.strictEqual(token.type, TOKEN_TYPE.EMAIL_VERIFICATION, 'Token type should be EMAIL_VERIFICATION');
         TOKEN_CODE = token.code;
+
+        // Restore original email sending method
+        actSend.act = sendEmailStub;
     });
 
     it('should activate the user status', async () => {
