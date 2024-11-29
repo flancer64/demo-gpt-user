@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://YOUR_SERVER_HERE/"
+      "url": "https://test.dev.gpt.wiredgeese.com/"
     }
   ],
   "paths": {
@@ -28,6 +28,13 @@
                     "type": "string",
                     "description": "The user's email address. This is required for sending the verification token and for communication regarding the account. It must be a valid email format (e.g., user@example.com).",
                     "format": "email"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "The user's name. This field is used to personalize the user's experience within the application and is displayed in account-related sections. It should be a simple and recognizable name, such as the user's first name or full name.",
+                    "example": "John Doe",
+                    "minLength": 1,
+                    "maxLength": 100
                   },
                   "isConsent": {
                     "type": "boolean",

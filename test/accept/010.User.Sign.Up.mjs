@@ -121,6 +121,9 @@ describe('010: User Sign Up', () => {
         const userPlugin = await modUserPlugin.read({userRef: USER_ID});
         assert.strictEqual(userPlugin.status, STATUS.ACTIVE, 'User status should be ACTIVE after email verification');
 
+        const userApp = await modUserApp.read({id: USER_ID});
+        assert.strictEqual(userApp.name, NAME, 'User name should be included in the response.');
+
         const token = await modToken.read({code: TOKEN_CODE});
         assert.strictEqual(token, null, 'Verification token should be deleted after use');
     });
