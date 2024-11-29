@@ -51,13 +51,13 @@ export default class GptUser_Back_Di_Proxy_Email_SignUp_Init {
              * Enriches email variables for verification emails.
              * Adjusts the verification link format and includes the username.
              *
-             * @returns {Promise<{verify_link: string, username: string}>}
+             * @returns {Promise<{edit_link: string, username: string}>}
              */
             origin.prepareVars = async function (trx, user) {
                 const res = await originalPrepareVars(trx, user);
 
-                if (res.verify_link && typeof res.verify_link === 'string') {
-                    res.verify_link = res.verify_link.replace(SEARCH, REPLACE);
+                if (res.edit_link && typeof res.edit_link === 'string') {
+                    res.edit_link = res.edit_link.replace(SEARCH, REPLACE);
                 }
 
                 if (user?.userRef) {

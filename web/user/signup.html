@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container" id="content">
+    <h1 id="title">Verifying...</h1>
+    <div id="loader" class="loader"></div>
+    <div id="info" class="info" style="display: none;">
+        <!-- User Name -->
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <span id="name" class="info-cell-value"></span>
+        </div>
+        <!-- Email -->
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <span id="email" class="info-cell-value"></span>
+        </div>
+        <!-- Date Registered -->
+        <div class="form-group">
+            <label for="dateCreated">Date Registered:</label>
+            <span id="dateCreated" class="info-cell-value"></span>
+        </div>
+        <!-- PIN Code -->
+        <div class="form-group">
+            <label for="pin">PIN Code:</label>
+            <span id="pin" class="info-cell-value"></span>
+        </div>
+        <!-- Account Status -->
+        <div class="form-group">
+            <label for="status">Account Status:</label>
+            <span id="status" class="info-cell-value"></span>
+        </div>
+        <p class="info-message">
+            To authenticate in the chat, please use your PIN (<b><span id="pinInfo"></span></b>)
+            and the <b>pass phrase</b> you set during registration.
+        </p>
+    </div>
+    <button class="button" id="redirectBtn" style="display: none;">Go to Chat</button>
+</div>
+
+<script type="module">
+    // Fetches user data based on the token provided in the URL
+    async function fetchUserData(token) {
+        let res;
+        const url = '/web-api-service/Fl64_Gpt_User_Shared_Web_Api_SignUp_Verify';
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({token})
+            });
+            if (response.ok) {
+                const {data} = await response.json();
+                res = data;
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+        return res;
+    }
+
+    // Displays user data on the page after successful verification
+    function showUserData(data) {
+        document.getElementById('title').innerText = 'Email Verified Successfully';
+        document.getElementById('name').innerText = data.name || 'N/A';
+        document.getElementById('email').innerText = data.email;
+        document.getElementById('dateCreated').innerText = new Date(data.dateCreated).toLocaleDateString();
+        document.getElementById('pin').innerText = data.pin;
+        document.getElementById('pinInfo').innerText = data.pin;
+        document.getElementById('status').innerText = data.status;
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('info').style.display = 'block';
+        document.getElementById('redirectBtn').style.display = 'inline-block';
+    }
+
+    // Displays an error message on the page
+    function showError(message) {
+        document.getElementById('title').innerText = message || 'Verification Failed';
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    // Initializes the verification process
+    async function initialize() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        if (!token) {
+            showError('Token is missing in the URL');
+            return;
+        }
+
+        const data = await fetchUserData(token);
+        if (data) {
+            switch (data.resultCode) {
+                case 'SUCCESS':
+                    showUserData(data);
+                    break;
+                case 'INVALID_TOKEN':
+                    showError('Invalid or expired verification token.');
+                    break;
+                case 'USER_NOT_FOUND':
+                    showError('User associated with the token was not found.');
+                    break;
+                default:
+                    showError('An unknown error occurred during verification.');
+            }
+        } else {
+            showError('Failed to fetch verification data.');
+        }
+    }
+
+    // Redirects the user to the chat page
+    function redirectToChat() {
+        window.location.href = 'https://chatgpt.com/g/g-FaoraVhde-nutri-log';
+    }
+
+    // Attach event handlers and initialize the verification process
+    window.onload = initialize;
+    document.getElementById('redirectBtn').onclick = redirectToChat;
+</script>
+
+</body>
+</html>
