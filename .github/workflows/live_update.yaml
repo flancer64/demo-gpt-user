@@ -40,7 +40,9 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY_CONTABO }}
           script: |
             cd ${{ env.APP_DIR }}
+            npm --version
             npm update --omit=dev
+            ls -lh
 
       - name: Start the service
         uses: appleboy/ssh-action@master
