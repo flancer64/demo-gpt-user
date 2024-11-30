@@ -31,12 +31,6 @@
     "pg": "^8.13.1"
   },
   "devDependencies": {
-    "@flancer64/gpt-user-auth": "github:flancer64/gpt-user-auth#main",
-    "@teqfw/core": "github:teqfw/core#main",
-    "@teqfw/db": "github:teqfw/db#main",
-    "@teqfw/di": "github:teqfw/di#main",
-    "@teqfw/email": "github:teqfw/email#main",
-    "@teqfw/test": "github:teqfw/test#main",
     "dotenv": "latest",
     "mocha": "github:mochajs/mocha"
   }
