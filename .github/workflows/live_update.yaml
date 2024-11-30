@@ -1,0 +1,52 @@
+name: LIVE - update and restart the app
+
+# start action manually
+on: workflow_dispatch
+
+env:
+  SERVICE: gpt-demo-user.service # the name of the service to manage
+  USER: live # the user to connect with `secrets.SERVER_SSH_KEY_CONTABO`
+  APP_DIR: /home/live/inst/demo/gpt-user/prod # directory of the application
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Stop the service
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST_CONTABO }}
+          username: ${{ env.USER }}
+          key: ${{ secrets.SERVER_SSH_KEY_CONTABO }}
+          script: |
+            sudo systemctl stop ${{ env.SERVICE }}
+
+      - name: Pull latest code from GitHub
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST_CONTABO }}
+          username: ${{ env.USER }}
+          key: ${{ secrets.SERVER_SSH_KEY_CONTABO }}
+          script: |
+            cd ${{ env.APP_DIR }}
+            git pull origin main
+
+      - name: Run npm update
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST_CONTABO }}
+          username: ${{ env.USER }}
+          key: ${{ secrets.SERVER_SSH_KEY_CONTABO }}
+          script: |
+            cd ${{ env.APP_DIR }}
+            npm update --omit=dev
+
+      - name: Start the service
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST_CONTABO }}
+          username: ${{ env.USER }}
+          key: ${{ secrets.SERVER_SSH_KEY_CONTABO }}
+          script: |
+            sudo systemctl start ${{ env.SERVICE }}

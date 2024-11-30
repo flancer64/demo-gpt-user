@@ -1,0 +1,23 @@
+name: LIVE - restart the app
+
+# start action manually
+on: workflow_dispatch
+
+env:
+  SERVICE: gpt-demo-user.service # the name of the service to restart
+  USER: live # the user to connect with `secrets.SERVER_SSH_KEY_CONTABO`
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Stop and start the service.
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST_CONTABO }}
+          username: ${{ env.USER }}
+          key: ${{ secrets.SERVER_SSH_KEY_CONTABO }}
+          script: |
+            sudo systemctl stop ${{ env.SERVICE }}
+            sudo systemctl start ${{ env.SERVICE }}
