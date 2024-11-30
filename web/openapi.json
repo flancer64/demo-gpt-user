@@ -54,7 +54,11 @@
                     "example": "sunny day morning"
                   }
                 },
-                "required": ["email", "isConsent", "passPhrase"]
+                "required": [
+                  "email",
+                  "isConsent",
+                  "passPhrase"
+                ]
               }
             }
           }
@@ -88,7 +92,11 @@
                       "example": "Please verify your email address by clicking the link we sent to your email."
                     }
                   },
-                  "required": ["resultCode", "pin", "instructions"]
+                  "required": [
+                    "resultCode",
+                    "pin",
+                    "instructions"
+                  ]
                 }
               }
             }
@@ -143,7 +151,10 @@
                     "description": "The body of the email. This field is optional and can be empty."
                   }
                 },
-                "required": ["pin", "passPhrase"]
+                "required": [
+                  "pin",
+                  "passPhrase"
+                ]
               }
             }
           }
@@ -195,9 +206,9 @@
     },
     "/web-api-service/Fl64_Gpt_User_Shared_Web_Api_Update_Init": {
       "post": {
-        "operationId": "initiateProfileEditing",
         "summary": "Initiate Profile Editing Process",
-        "description": "Initiates the profile editing process by validating the provided email or PIN and sending a link for profile editing to the user's email.",
+        "description": "Initiates the profile editing process by validating the provided email or PIN and sending a link for profile editing to the user's email. Requires a Bearer token in the Authorization header, formatted as a UUID.",
+        "operationId": "initiateProfileEditing",
         "requestBody": {
           "required": true,
           "content": {
@@ -208,16 +219,18 @@
                   "email": {
                     "type": "string",
                     "format": "email",
-                    "description": "The email address associated with the user's account. This is one of the possible identifiers for the profile editing request.",
+                    "description": "The email address associated with the user's account. This is the primary identifier used for initiating the profile editing process. If found, an email with a profile editing link is sent to this address.",
                     "example": "user@example.com"
                   },
                   "pin": {
                     "type": "integer",
-                    "description": "A unique PIN assigned to the user during registration. This serves as a numeric identifier for the user's account.",
+                    "description": "A unique PIN assigned to the user during registration. This serves as a fallback identifier for the profile editing process. If an email lookup fails, the service will attempt to find the user by PIN.",
                     "example": 123456
                   }
                 },
-                "required": ["email", "pin"]
+                "required": [
+                  "email"
+                ]
               }
             }
           }
@@ -232,17 +245,43 @@
                   "properties": {
                     "instructions": {
                       "type": "string",
-                      "description": "A human-readable message describing the outcome of the profile editing initiation process. This helps the application or the user understand the result of the operation.",
-                      "example": "The profile editing link was successfully sent to the user's registered email address."
+                      "description": "A human-readable message describing the outcome of the profile editing initiation process. This message confirms whether the profile editing link was sent to the user's email or if no user was found.",
+                      "example": "If the user provided valid credentials, a link to update the profile has been sent to their email."
                     },
                     "resultCode": {
                       "type": "string",
-                      "description": "A code indicating the result of the profile editing initiation operation. It can be used programmatically to determine success or failure.",
-                      "enum": ["SERVER_ERROR", "SUCCESS"],
+                      "description": "A code indicating the result of the profile editing initiation operation. This can be used programmatically to determine success or failure.",
+                      "enum": [
+                        "SERVER_ERROR",
+                        "SUCCESS"
+                      ],
                       "example": "SUCCESS"
                     }
                   },
-                  "required": ["instructions", "resultCode"]
+                  "required": [
+                    "instructions",
+                    "resultCode"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The request is forbidden due to missing or invalid Bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "A human-readable message indicating that the request was not authorized due to missing or invalid Bearer token.",
+                      "example": "Authorization failed: Bearer token is missing or invalid."
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             }
@@ -256,17 +295,22 @@
                   "properties": {
                     "instructions": {
                       "type": "string",
-                      "description": "A human-readable message indicating that an error occurred during the process.",
+                      "description": "A human-readable message indicating that an error occurred during the process. This informs the user or application to retry the operation later.",
                       "example": "An unexpected server error occurred. Please try again later."
                     },
                     "resultCode": {
                       "type": "string",
-                      "description": "A code indicating that a server error occurred.",
-                      "enum": ["SERVER_ERROR"],
+                      "description": "A code indicating that a server error occurred. This allows the application to programmatically recognize the failure and take appropriate actions.",
+                      "enum": [
+                        "SERVER_ERROR"
+                      ],
                       "example": "SERVER_ERROR"
                     }
                   },
-                  "required": ["instructions", "resultCode"]
+                  "required": [
+                    "instructions",
+                    "resultCode"
+                  ]
                 }
               }
             }

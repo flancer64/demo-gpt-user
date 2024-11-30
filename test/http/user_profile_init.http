@@ -1,0 +1,8 @@
+### Init auth data change process for GPT user
+POST https://test.dev.gpt.wiredgeese.com/web-api-service/Fl64_Gpt_User_Shared_Web_Api_Update_Init
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "email": "{{email}}"
+}
