@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://test.dev.gpt.wiredgeese.com/"
+      "url": "https://user.demo.gpt.wiredgeese.com/"
     }
   ],
   "paths": {
