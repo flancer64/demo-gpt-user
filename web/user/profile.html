@@ -18,6 +18,12 @@
             <input id="name" name="name" type="text" placeholder="Enter your name">
         </div>
 
+        <!-- PIN (Read-Only) -->
+        <div class="form-group">
+            <label for="pin">PIN</label>
+            <input id="pin" name="pin" type="number" readonly>
+        </div>
+
         <!-- Email (Read-Only) -->
         <div class="form-group">
             <label for="email">Email</label>
@@ -55,6 +61,10 @@
 </div>
 
 <script type="module">
+    /**
+     * @param {string} token
+     * @return {Promise<GptUser_Shared_Di_Proxy_Update_Load.Response|null>}
+     */
     async function fetchUserData({token}) {
         const url = '/web-api-service/Fl64_Gpt_User_Shared_Web_Api_Update_Load';
         try {
@@ -109,12 +119,13 @@
 
     (async () => {
         const profileData = await fetchUserData({token});
-        if (profileData?.email) {
-            form.querySelector('#name').value = profileData.name || '';
-            form.querySelector('#email').value = profileData.email || '';
+        if (profileData && profileData.email) {
             form.querySelector('#dateCreated').value = formatDate(profileData.dateCreated);
-            form.querySelector('#status').value = profileData.status || '';
+            form.querySelector('#email').value = profileData.email || '';
             form.querySelector('#locale').value = profileData.locale || '';
+            form.querySelector('#name').value = profileData.name || '';
+            form.querySelector('#pin').value = profileData.pin || '';
+            form.querySelector('#status').value = profileData.status || '';
 
             loader.style.display = 'none';
             form.style.display = 'block';
