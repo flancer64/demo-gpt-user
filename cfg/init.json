@@ -26,5 +26,8 @@
   },
   "@flancer64/gpt-user-auth": {
     "authBearerTokens": ["List of Bearer tokens for API authentication."]
+  },
+  "@flancer64/demo-gpt-user": {
+    "emailSupport": "address-to-get-applications@mail.tld"
   }
 }

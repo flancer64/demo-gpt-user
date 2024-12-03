@@ -317,6 +317,90 @@
           }
         }
       }
+    },
+    "/web-api-service/GptUser_Shared_Web_Api_Application_Submission": {
+      "post": {
+        "summary": "Submit a user application request",
+        "description": "Allows users to submit a request for web application development, including details about their business, contact information, and experience with GPT-based systems.",
+        "operationId": "submitApplication",
+        "requestBody": {
+          "description": "Data required to submit an application request.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pin": {
+                    "type": "integer",
+                    "description": "The user's unique PIN for authentication."
+                  },
+                  "passPhrase": {
+                    "type": "string",
+                    "description": "The user's secret passphrase for authentication."
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "The subject of the application. This field is optional and can be empty."
+                  },
+                  "messageEn": {
+                    "type": "string",
+                    "description": "The body of the application message in English. This field is optional and can be empty."
+                  },
+                  "messageRu": {
+                    "type": "string",
+                    "description": "The body of the application message in Russian. This field is optional and can be empty."
+                  }
+                },
+                "required": ["pin", "passPhrase"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The application was successfully submitted or failed with an appropriate error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultCode": {
+                      "type": "string",
+                      "enum": [
+                        "UNAUTHENTICATED",
+                        "SERVICE_ERROR",
+                        "SUCCESS"
+                      ],
+                      "description": "Indicates the result of the operation. Possible values are: UNAUTHENTICATED, SERVICE_ERROR, SUCCESS."
+                    },
+                    "instructions": {
+                      "type": "string",
+                      "description": "A detailed message describing the result of the operation."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error. An unexpected issue occurred while processing the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "A general error message indicating that the service is temporarily unavailable."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

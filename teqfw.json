@@ -21,5 +21,10 @@
         "Fl64_Gpt_User_Shared_Web_Api_Update_Save": "GptUser_Shared_Di_Proxy_Update_Save"
       }
     }
+  },
+  "@teqfw/web-api": {
+    "services": [
+      "GptUser_Back_Web_Api_Application_Submission"
+    ]
   }
 }
