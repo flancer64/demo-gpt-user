@@ -1,5 +1,10 @@
 /**
  * Service for submitting a user application request.
+ *
+ * The service allows authenticated users to send free-form messages directly to the business owner or support team.
+ * Users formulate their message in their native language through the chat, which translates it into English and Russian
+ * before delivering it to the business owner. English serves as the international communication language, while Russian
+ * is used as the owner's native language.
  */
 export default class GptUser_Back_Web_Api_Application_Submission {
     /**
@@ -96,7 +101,7 @@ export default class GptUser_Back_Web_Api_Application_Submission {
 
                     resultCode = emailSent.success ? CODE.SUCCESS : CODE.SERVICE_ERROR;
                     rs.message = resultCode === CODE.SUCCESS
-                        ? 'The application has been successfully submitted. Check your registered email for confirmation.'
+                        ? 'Thank you for your message. We appreciate your cooperation and will review it shortly.'
                         : 'The application could not be submitted due to an internal error. Please try again later.';
                 }
 
@@ -108,7 +113,7 @@ export default class GptUser_Back_Web_Api_Application_Submission {
             }
 
             rs.resultCode = resultCode;
-            Object.assign(res, rs); // Populate response
+            Object.assign(res, rs);
         };
     }
 }

@@ -1,45 +1,76 @@
 /**
- * Data Transfer Object (DTO) for submitting a user application request.
- * This structure defines the request and response formats for the application submission operation.
- * It serves as a bridge between the API and the calling application logic.
+ * Data Transfer Objects (DTOs) and supporting logic for sending user messages to the business owner.
+ * This script provides:
+ * - The request DTO defining the input structure for sending a user message.
+ * - The response DTO defining the output structure returned by the API.
+ * - Result codes indicating the operation's outcome.
+ * - Factory functions to create and validate DTOs.
+ *
+ * The service allows authenticated users to send free-form messages directly to the business owner or support team.
+ * Users formulate their message in their native language through the chat, which translates it into English and Russian
+ * before delivering it to the business owner. English serves as the international communication language, while Russian
+ * is used as the owner's native language.
+ *
  * @namespace GptUser_Shared_Web_Api_Application_Submission
  */
 
 // VARS
 /**
- * Enum-like object defining possible result codes for the application submission operation.
- * @memberOf GptUser_Shared_Web_Api_Application_Submission
+ * Enum-like object defining possible result codes for the message submission operation.
+ * @memberOf GptUser_Shared_Web_Api_Message_Submission
  */
 const RESULT_CODE = {
-    SERVICE_ERROR: 'SERVICE_ERROR', // Internal server error occurred during the application submission process.
-    SUCCESS: 'SUCCESS', // Application was successfully submitted.
-    UNAUTHENTICATED: 'UNAUTHENTICATED', // Authentication failed due to incorrect PIN or pass phrase.
+    /**
+     * Indicates an internal server error occurred during the message submission process.
+     * The user should retry later.
+     */
+    SERVICE_ERROR: 'SERVICE_ERROR',
+
+    /**
+     * Indicates the message was successfully submitted to the service.
+     */
+    SUCCESS: 'SUCCESS',
+
+    /**
+     * Indicates authentication failed due to incorrect PIN or passphrase.
+     * The user should verify their credentials and try again.
+     */
+    UNAUTHENTICATED: 'UNAUTHENTICATED',
 };
 Object.freeze(RESULT_CODE);
 
 // CLASSES
 /**
- * Request DTO for the application submission service.
- * Defines the structure of the input data required for submitting an application.
- * @memberOf GptUser_Shared_Web_Api_Application_Submission
+ * Request DTO for submitting a user message.
+ * Defines the input structure required by the API for processing a user message submission.
+ * The sender (chat) must obtain authentication details (PIN and passphrase) from the user, along with the message
+ * text in any language, and send it translated into both English and Russian.
+ *
+ * @memberOf GptUser_Shared_Web_Api_Message_Submission
  */
 class Request {
     /**
-     * The body of the email message in English.
+     * The body of the message in English.
+     * Must clearly convey the user's message or request.
+     *
      * @type {string}
-     * @example "Business: Tech, Integration: Yes, GPT Experience: No, Contact: email@example.com"
+     * @example "I would like to inquire about custom integrations. Contact: email@example.com"
      */
     messageEn;
 
     /**
-     * The body of the email message in Russian.
+     * The body of the message in Russian.
+     * Must mirror the content of `messageEn` for Russian-speaking recipients.
+     *
      * @type {string}
-     * @example "Бизнес: Технологии, Интеграция: Да, Опыт с GPT: Нет, Контакт: email@example.com"
+     * @example "Я хотел бы узнать о кастомных интеграциях. Контакт: email@example.com"
      */
     messageRu;
 
     /**
-     * Passphrase used for user authentication.
+     * Passphrase used for authenticating the user.
+     * Together with the PIN, this ensures the request originates from a valid user.
+     *
      * @type {string}
      * @example "my_secure_passphrase"
      */
@@ -47,48 +78,66 @@ class Request {
 
     /**
      * Unique PIN assigned to the user during registration.
+     * Used to identify the user's account for the message submission process.
+     *
      * @type {number}
      * @example 123456
      */
     pin;
 
     /**
-     * Subject line for the email.
+     * Subject line for the message.
+     * Provides a brief and meaningful description of the user's intent.
+     * The subject is always specified by the chat in English.
+     *
      * @type {string}
-     * @example "Application Request for Web Application Development"
+     * @example "Inquiry about Custom Integrations"
      */
     subject;
 }
 
 /**
- * Response DTO for the application submission service.
- * Defines the structure of the response data returned by the API.
- * @memberOf GptUser_Shared_Web_Api_Application_Submission
+ * Response DTO for the message submission operation.
+ * Defines the output structure returned by the API after processing a user message.
+ * Communicates the operation's result to the application and provides a human-readable message for the user.
+ *
+ * @memberOf GptUser_Shared_Web_Api_Message_Submission
  */
 class Response {
     /**
-     * Human-readable status message describing the outcome of the application submission operation.
+     * A human-readable message describing the outcome of the message submission process.
+     * This message provides clear feedback to the user regarding the request's status.
+     * Instructions are provided in English and must be translated by the chat
+     * into the language used by the specific user for communication.
+     *
      * @type {string}
-     * @example "The application has been successfully submitted. We will contact you shortly."
+     * @example "The message has been successfully submitted. We will contact you shortly."
      */
     instructions;
 
+
     /**
-     * Code representing the result of the application submission operation.
+     * A code representing the result of the message submission process.
+     * Used programmatically to determine the success or failure of the operation.
+     *
      * @type {string}
-     * @see GptUser_Shared_Web_Api_Application_Submission.RESULT_CODE
+     * @see GptUser_Shared_Web_Api_Message_Submission.RESULT_CODE
+     * @example "SUCCESS"
      */
     resultCode;
 }
 
 /**
- * Service endpoint for the application submission feature.
- * Implements the core API logic for handling user application submissions.
+ * Service endpoint for the message submission feature.
+ * Implements the core API logic for handling user message submissions.
+ * Contains methods for validating and structuring input data, processing API responses, and handling result codes.
+ *
  * @implements TeqFw_Web_Api_Shared_Api_Endpoint
  */
-export default class GptUser_Shared_Web_Api_Application_Submission {
+export default class GptUser_Shared_Web_Api_Message_Submission {
     /**
-     * Initializes the service with necessary utilities for type casting.
+     * Initializes the service with utilities for type casting and validation.
+     *
      * @param {TeqFw_Core_Shared_Util_Cast} cast - Utility for safe type conversion.
      */
     constructor(
@@ -99,9 +148,11 @@ export default class GptUser_Shared_Web_Api_Application_Submission {
         // INSTANCE METHODS
 
         /**
-         * Creates a request DTO for the application submission.
-         * @param {GptUser_Shared_Web_Api_Application_Submission.Request} [data] - User input data.
-         * @returns {GptUser_Shared_Web_Api_Application_Submission.Request} - Structured request object.
+         * Creates a request DTO for the message submission process.
+         * Validates and structures the user-provided data into a format understood by the API.
+         *
+         * @param {GptUser_Shared_Web_Api_Message_Submission.Request} [data]
+         * @returns {GptUser_Shared_Web_Api_Message_Submission.Request}
          */
         this.createReq = function (data) {
             const req = new Request();
@@ -114,9 +165,11 @@ export default class GptUser_Shared_Web_Api_Application_Submission {
         };
 
         /**
-         * Creates a response DTO for the application submission operation.
-         * @param {GptUser_Shared_Web_Api_Application_Submission.Response} [data] - API response data.
-         * @returns {GptUser_Shared_Web_Api_Application_Submission.Response} - Parsed response object.
+         * Creates a response DTO for the message submission operation.
+         * Parses the API response into a structured format for easy processing.
+         *
+         * @param {GptUser_Shared_Web_Api_Message_Submission.Response} [data]
+         * @returns {GptUser_Shared_Web_Api_Message_Submission.Response}
          */
         this.createRes = function (data) {
             const res = new Response();
@@ -126,8 +179,8 @@ export default class GptUser_Shared_Web_Api_Application_Submission {
         };
 
         /**
-         * Retrieves the available result codes for the application submission operation.
-         * @returns {typeof GptUser_Shared_Web_Api_Application_Submission.RESULT_CODE} - Defined result codes.
+         * Retrieves the available result codes for the message submission process.
+         * @returns {typeof GptUser_Shared_Web_Api_Message_Submission.RESULT_CODE}
          */
         this.getResultCodes = () => RESULT_CODE;
     }

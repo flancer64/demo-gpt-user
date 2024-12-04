@@ -14,7 +14,7 @@
     "/web-api-service/Fl64_Gpt_User_Shared_Web_Api_SignUp_Init": {
       "post": {
         "summary": "Initialize user sign-up",
-        "description": "Starts the user sign-up process by collecting the user's email, consent for data processing, preferred locale, and passphrase. It creates a user record with a 'pending verification' status, generates a unique PIN, and sends an email verification token. The PIN and passphrase must be securely stored by the client for future authentication.",
+        "description": "Begins user sign-up by collecting email, consent, locale, and passphrase. Creates a user record with 'pending verification' status, generates a PIN, and sends an email verification token. PIN and passphrase must be securely stored by the client.",
         "security": [
           {
             "bearerAuth": []
@@ -316,13 +316,18 @@
         }
       }
     },
-    "/web-api-service/GptUser_Shared_Web_Api_Application_Submission": {
+    "/web-api-service/GptUser_Shared_Web_Api_Message_Submission": {
       "post": {
-        "summary": "Submit a user application request",
-        "description": "Allows users to submit a request for web application development, including details about their business, contact information, and experience with GPT-based systems.",
-        "operationId": "submitApplication",
+        "summary": "Submit a message to the business owner",
+        "description": "Authenticated users send messages in their language via chat. Chat translates the message into English and Russian before delivery. English is for international use; Russian is for the business owner.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "operationId": "submitMessage",
         "requestBody": {
-          "description": "Data required to submit an application request.",
+          "description": "Data required to submit a message to the business owner or support team.",
           "required": true,
           "content": {
             "application/json": {
@@ -331,33 +336,38 @@
                 "properties": {
                   "pin": {
                     "type": "integer",
-                    "description": "The user's unique PIN for authentication."
+                    "description": "The user's unique PIN for authentication. Used alongside the passphrase to verify the user's identity.",
+                    "example": 123456
                   },
                   "passPhrase": {
                     "type": "string",
-                    "description": "The user's secret passphrase for authentication."
+                    "description": "The user's secret passphrase for authentication. Ensures that the message is submitted by a valid user.",
+                    "example": "my_secure_passphrase"
                   },
                   "subject": {
                     "type": "string",
-                    "description": "The subject of the application. This field is optional and can be empty."
+                    "description": "The subject of the message. Provides a brief and meaningful description of the user's intent. This field is always specified by the chat in English.",
+                    "example": "Inquiry about Custom Integrations"
                   },
                   "messageEn": {
                     "type": "string",
-                    "description": "The body of the application message in English. This field is optional and can be empty."
+                    "description": "The body of the message in English. Translated from the user's original input to ensure clarity in international communication.",
+                    "example": "I would like to inquire about custom integrations. Contact: email@example.com"
                   },
                   "messageRu": {
                     "type": "string",
-                    "description": "The body of the application message in Russian. This field is optional and can be empty."
+                    "description": "The body of the message in Russian. Translated from the user's original input to ensure clarity for Russian-speaking recipients.",
+                    "example": "Я хотел бы узнать о кастомных интеграциях. Контакт: email@example.com"
                   }
                 },
-                "required": ["pin", "passPhrase"]
+                "required": ["pin", "passPhrase", "messageEn", "messageRu"]
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "The application was successfully submitted or failed with an appropriate error message.",
+            "description": "The message was successfully submitted or failed with an appropriate error message.",
             "content": {
               "application/json": {
                 "schema": {
@@ -370,13 +380,16 @@
                         "SERVICE_ERROR",
                         "SUCCESS"
                       ],
-                      "description": "Indicates the result of the operation. Possible values are: UNAUTHENTICATED, SERVICE_ERROR, SUCCESS."
+                      "description": "Indicates the result of the operation. Possible values are: UNAUTHENTICATED, SERVICE_ERROR, SUCCESS.",
+                      "example": "SUCCESS"
                     },
                     "instructions": {
                       "type": "string",
-                      "description": "A detailed message describing the result of the operation."
+                      "description": "A human-readable message describing the result of the operation. This message is provided in English and must be translated by the chat into the user's preferred language.",
+                      "example": "The message has been successfully submitted. We will contact you shortly."
                     }
-                  }
+                  },
+                  "required": ["resultCode", "instructions"]
                 }
               }
             }
@@ -390,9 +403,11 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "description": "A general error message indicating that the service is temporarily unavailable."
+                      "description": "A general error message indicating that the service is temporarily unavailable.",
+                      "example": "Service unavailable. Please try again later."
                     }
-                  }
+                  },
+                  "required": ["error"]
                 }
               }
             }
