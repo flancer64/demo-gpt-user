@@ -1,0 +1,15 @@
+Complete Your Registration at DemoOnboard
+Hello,
+
+Thank you for signing up with DemoOnboard! To complete the process and activate your account, please confirm your email address by clicking the link below:
+
+{{verify_link}}
+
+If the link above does not work, copy and paste it into your browser's address bar.
+
+Please note that this confirmation link is valid for 24 hours.
+
+If you did not register with DemoOnboard, you can safely ignore this email.
+
+Best regards,
+The DemoOnboard Support Team
