@@ -116,11 +116,11 @@
     },
     "/web-api-service/Fl64_Gpt_User_Shared_Web_Api_Test_Email": {
       "post": {
-        "summary": "Send a message to the user's registered email",
-        "description": "Allows sending a message to the email registered with the user's account. Requires the user's PIN, passphrase for authentication, and an optional message and subject for the email.",
-        "operationId": "sendEmail",
+        "summary": "Send a test email to the user's registered address",
+        "description": "This endpoint allows a registered user to send a test email to their registered email address. Authentication is performed using the user's PIN and passphrase. Optional fields for the email subject and message can be provided, or default values will be used.",
+        "operationId": "sendTestEmail",
         "requestBody": {
-          "description": "Data required to send an email to the registered user.",
+          "description": "Data required to authenticate the user and send a test email to their registered email address.",
           "required": true,
           "content": {
             "application/json": {
@@ -129,32 +129,33 @@
                 "properties": {
                   "pin": {
                     "type": "integer",
-                    "description": "The user's unique PIN for authentication."
+                    "description": "The unique PIN assigned to the user during registration. Required for authentication.",
+                    "example": 123456
                   },
                   "passPhrase": {
                     "type": "string",
-                    "description": "The user's secret passphrase for authentication."
+                    "description": "The user's secret passphrase for authentication. This must match the passphrase provided during registration.",
+                    "example": "my_secure_passphrase"
                   },
                   "subject": {
                     "type": "string",
-                    "description": "The subject of the email. This field is optional and can be empty."
+                    "description": "The subject line of the email. If not provided, the service will use a default value.",
+                    "example": "Test Email"
                   },
                   "message": {
                     "type": "string",
-                    "description": "The body of the email. This field is optional and can be empty."
+                    "description": "The body of the email. If not provided, the service will use a default message.",
+                    "example": "Hello, this is a test email from our application!"
                   }
                 },
-                "required": [
-                  "pin",
-                  "passPhrase"
-                ]
+                "required": ["pin", "passPhrase"]
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "The email was sent successfully or failed with an appropriate error message.",
+            "description": "The email operation completed successfully or failed with an appropriate error message.",
             "content": {
               "application/json": {
                 "schema": {
@@ -162,18 +163,20 @@
                   "properties": {
                     "resultCode": {
                       "type": "string",
+                      "description": "Indicates the result of the operation. Possible values are: UNAUTHENTICATED, SERVICE_ERROR, SUCCESS.",
                       "enum": [
                         "UNAUTHENTICATED",
                         "SERVICE_ERROR",
                         "SUCCESS"
-                      ],
-                      "description": "Indicates the result of the operation. Possible values are: UNAUTHENTICATED, SERVICE_ERROR, SUCCESS."
+                      ]
                     },
-                    "message": {
+                    "instructions": {
                       "type": "string",
-                      "description": "A detailed message describing the result of the operation."
+                      "description": "A human-readable message describing the result of the operation. This message should be translated into the user's preferred language before being displayed.",
+                      "example": "The email was successfully sent to the user's registered address."
                     }
-                  }
+                  },
+                  "required": ["resultCode", "instructions"]
                 }
               }
             }
@@ -187,7 +190,8 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "description": "A general error message indicating that the service is temporarily unavailable."
+                      "description": "A general error message indicating that the service is temporarily unavailable.",
+                      "example": "Service unavailable. Please try again later."
                     }
                   }
                 }
