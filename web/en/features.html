@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Application Features</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <h1>Demo Application Features</h1>
+    </div>
+</header>
+<div class="container">
+    <section class="section">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#registration">New User Registration</a></li>
+            <li><a href="#email-verification">Email Verification</a></li>
+            <li><a href="#access-restore">Access Restore and Profile Editing</a></li>
+            <li><a href="#test-email">Sending a Test Email</a></li>
+            <li><a href="#business-message">Sending a Message to the Business Owner</a></li>
+        </ul>
+    </section>
+
+    <section class="section" id="registration">
+        <h2>New User Registration</h2>
+        <p>
+            Users can register through the chat by providing their details in their native language (either by voice or
+            text).
+        </p>
+        <p>To register, users need to provide the following:</p>
+        <ul>
+            <li>Email address.</li>
+            <li>Name.</li>
+            <li>Password phrase.</li>
+            <li>Preferred application language.</li>
+        </ul>
+        <p>
+            ChatGPT structures this information and sends it as POST requests to the web service for account creation.
+            After registration, the user receives a unique PIN and password phrase.
+        </p>
+    </section>
+
+    <section class="section" id="email-verification">
+        <h2>Email Verification</h2>
+        <p>
+            To complete the registration, the web service sends a verification email to the provided email address.
+            The user confirms their email using the provided link, after which their account is activated,
+            granting them access to additional services through actions.
+        </p>
+    </section>
+
+    <section class="section" id="access-restore">
+        <h2>Access Restore and Profile Editing</h2>
+        <p>
+            Users can request to edit their account data or restore access through the chat by providing their PIN
+            (if remembered) or their email address. A one-time link is sent to the provided email, allowing access
+            to the editing interface.
+        </p>
+        <p>Using this link, users can:</p>
+        <ul>
+            <li>Change their name.</li>
+            <li>Modify the application's interface language.</li>
+            <li>View their PIN code.</li>
+            <li>Set a new password phrase.</li>
+        </ul>
+        <p>
+            This process combines access recovery and profile editing into a simple and secure method for managing
+            user accounts.
+        </p>
+    </section>
+
+
+    <section class="section" id="test-email">
+        <h2>Sending a Test Email</h2>
+        <p>
+            Registered users can send a test email to themselves through the chat. This feature helps verify
+            account settings and ensure the email service is functioning correctly.
+        </p>
+    </section>
+
+    <section class="section" id="business-message">
+        <h2>Sending a Message to the Business Owner</h2>
+        <p>
+            Registered users can send an email message to the business owner. This allows them to ask questions,
+            leave feedback, or propose collaboration opportunities.
+        </p>
+    </section>
+</div>
+<footer class="footer">
+    <div class="container">
+        <nav class="footer-nav">
+            <a href="index.html">Home</a>
+            <a href="features.html">Features</a>
+            <a href="contact.html">Contact</a>
+            <a href="policy.html">Privacy Policy</a>
+            <a href="../openapi.json">OpenAPI</a>
+        </nav>
+        <p>© 2024 F. Lancer, SIA. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

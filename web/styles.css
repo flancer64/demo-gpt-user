@@ -1,59 +1,80 @@
-/* Общий стиль для всего сайта */
 body {
-    margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
     color: #333;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    line-height: 1.6;
 }
 
-/* Основной контейнер */
 .container {
-    flex: 1;
-    width: 90%;
-    max-width: 1200px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
 }
 
-/* Заголовок */
-header {
-    background-color: #f57c00;
-    color: white;
+.header {
+    background-color: #0d1117;
+    color: #ffffff;
     padding: 20px 0;
     text-align: center;
 }
 
-header h1 {
+.header h1 {
     margin: 0;
-    font-size: 2.5rem;
+    font-size: 24px;
 }
 
-/* Футер */
-footer {
-    background-color: #f9f9f9;
-    color: #555;
-    text-align: center;
-    padding: 15px 0;
-    margin-top: 20px;
-    border-top: 1px solid #ddd;
+.section {
+    background: #ffffff;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-footer nav a {
-    color: #f57c00;
+.section h2 {
+    margin-top: 0;
+    color: #0d1117;
+}
+
+.section a {
+    color: #007acc;
     text-decoration: none;
-    margin: 0 10px;
-    font-size: 1rem;
-    text-transform: uppercase;
 }
 
-footer nav a:hover {
+.section a:hover {
     text-decoration: underline;
 }
 
-footer p {
-    margin-top: 10px;
-    font-size: 0.9rem;
+.footer {
+    background-color: #0d1117;
+    color: #ffffff;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.footer-nav a {
+    color: #ffffff;
+    margin: 0 10px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.footer-nav a:hover {
+    text-decoration: underline;
+}
+
+
+.image-container {
+    text-align: center;
+}
+
+.image-container img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
