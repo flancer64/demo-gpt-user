@@ -24,7 +24,7 @@
   },
   "@teqfw/web-api": {
     "services": [
-      "GptUser_Back_Web_Api_Application_Submission"
+      "GptUser_Back_Web_Api_Message_Submission"
     ]
   }
 }

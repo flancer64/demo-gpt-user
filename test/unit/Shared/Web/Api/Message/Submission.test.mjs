@@ -2,11 +2,11 @@ import {container} from '@teqfw/test';
 import assert from 'assert';
 
 // GET OBJECTS FROM CONTAINER
-/** @type {GptUser_Shared_Web_Api_Application_Submission} */
-const endpoint = await container.get('GptUser_Shared_Web_Api_Application_Submission$');
+/** @type {GptUser_Shared_Web_Api_Message_Submission} */
+const endpoint = await container.get('GptUser_Shared_Web_Api_Message_Submission$');
 const RESULT_CODE = endpoint.getResultCodes();
 
-describe('GptUser_Shared_Web_Api_Application_Submission', () => {
+describe('GptUser_Shared_Web_Api_Message_Submission', () => {
     // Expected properties for the Request DTO
     const expectedRequestProperties = [
         'messageEn',

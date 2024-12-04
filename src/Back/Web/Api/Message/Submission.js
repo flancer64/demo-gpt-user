@@ -6,13 +6,13 @@
  * before delivering it to the business owner. English serves as the international communication language, while Russian
  * is used as the owner's native language.
  */
-export default class GptUser_Back_Web_Api_Application_Submission {
+export default class GptUser_Back_Web_Api_Message_Submission {
     /**
      * @param {GptUser_Back_Defaults} DEF
      * @param {TeqFw_Core_Back_Config} config
      * @param {TeqFw_Core_Shared_Api_Logger} logger
      * @param {TeqFw_Web_Back_App_Server_Respond.respond403|function} respond403
-     * @param {GptUser_Shared_Web_Api_Application_Submission} endpoint
+     * @param {GptUser_Shared_Web_Api_Message_Submission} endpoint
      * @param {TeqFw_Db_Back_RDb_IConnect} conn
      * @param {Fl64_Gpt_User_Back_Util_Log} utilLog
      * @param {Fl64_Gpt_User_Back_Mod_Auth} modAuth
@@ -25,7 +25,7 @@ export default class GptUser_Back_Web_Api_Application_Submission {
             TeqFw_Core_Back_Config$: config,
             TeqFw_Core_Shared_Api_Logger$$: logger,
             'TeqFw_Web_Back_App_Server_Respond.respond403': respond403,
-            GptUser_Shared_Web_Api_Application_Submission$: endpoint,
+            GptUser_Shared_Web_Api_Message_Submission$: endpoint,
             TeqFw_Db_Back_RDb_IConnect$: conn,
             Fl64_Gpt_User_Back_Util_Log$: utilLog,
             Fl64_Gpt_User_Back_Mod_Auth$: modAuth,
@@ -40,7 +40,7 @@ export default class GptUser_Back_Web_Api_Application_Submission {
         // MAIN
         /**
          * Returns the endpoint associated with this service.
-         * @returns {GptUser_Shared_Web_Api_Application_Submission}
+         * @returns {GptUser_Shared_Web_Api_Message_Submission}
          */
         this.getEndpoint = () => endpoint;
 
@@ -56,8 +56,8 @@ export default class GptUser_Back_Web_Api_Application_Submission {
 
         /**
          * Processes the application submission request.
-         * @param {GptUser_Shared_Web_Api_Application_Submission.Request} req
-         * @param {GptUser_Shared_Web_Api_Application_Submission.Response} res
+         * @param {GptUser_Shared_Web_Api_Message_Submission.Request} req
+         * @param {GptUser_Shared_Web_Api_Message_Submission.Response} res
          * @param {TeqFw_Web_Api_Back_Api_Service_Context} [context]
          * @returns {Promise<void>}
          */

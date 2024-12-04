@@ -15,7 +15,7 @@ const MESSAGE_EN = 'This is a test email message.';
 const MESSAGE_RU = 'Это сообщение на русском.';
 const OAI_USER_ID = process.env.OAI_USER_ID ?? 'some-user-id';
 const PASS_PHRASE = process.env.PASS_PHRASE ?? 'some password';
-const SUBJECT = 'Test Application';
+const SUBJECT = 'Test Message';
 let PIN;
 
 // SETUP CONTAINER
@@ -23,10 +23,10 @@ const container = await createContainer();
 await initConfig(container);
 
 // SETUP ENVIRONMENT
-/** @type {GptUser_Back_Web_Api_Application_Submission} */
-let service = await container.get('GptUser_Back_Web_Api_Application_Submission$');
-/** @type {GptUser_Shared_Web_Api_Application_Submission} */
-let endpoint = await container.get('GptUser_Shared_Web_Api_Application_Submission$');
+/** @type {GptUser_Back_Web_Api_Message_Submission} */
+let service = await container.get('GptUser_Back_Web_Api_Message_Submission$');
+/** @type {GptUser_Shared_Web_Api_Message_Submission} */
+let endpoint = await container.get('GptUser_Shared_Web_Api_Message_Submission$');
 const RES_CODE = endpoint.getResultCodes();
 
 /** @type {Fl64_Gpt_User_Back_Mod_User} */
@@ -42,7 +42,7 @@ const DEF = await container.get('GptUser_Back_Defaults$');
 /** @type {Fl64_Gpt_User_Back_Defaults} */
 const DEF_GPT = await container.get('Fl64_Gpt_User_Back_Defaults$');
 
-describe('040: Application Submission Service', () => {
+describe('040: Message Submission Service', () => {
     const context = {
         request: {
             headers: {

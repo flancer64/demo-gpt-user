@@ -11,7 +11,7 @@
  * before delivering it to the business owner. English serves as the international communication language, while Russian
  * is used as the owner's native language.
  *
- * @namespace GptUser_Shared_Web_Api_Application_Submission
+ * @namespace GptUser_Shared_Web_Api_Message_Submission
  */
 
 // VARS
