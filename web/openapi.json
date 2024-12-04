@@ -14,10 +14,10 @@
     "/web-api-service/Fl64_Gpt_User_Shared_Web_Api_SignUp_Init": {
       "post": {
         "summary": "Initialize user sign-up",
-        "description": "Initiates the user sign-up process by collecting the user's email, consent for data processing, and a secret passphrase. Creates a user account with a 'pending verification' status and generates a PIN code. The account becomes active after email verification.",
+        "description": "Starts the user sign-up process by collecting the user's email, consent for data processing, preferred locale, and passphrase. It creates a user record with a 'pending verification' status, generates a unique PIN, and sends an email verification token. The PIN and passphrase must be securely stored by the client for future authentication.",
         "operationId": "userSignUpInit",
         "requestBody": {
-          "description": "Data required to initialize the user sign-up process. The provided email will be used for verification and communication. Consent is mandatory to proceed, and the secret passphrase will serve as a personal authentication token alongside the PIN code.",
+          "description": "Data required to initialize the user sign-up process. The email will be used for communication and account verification. Consent must be set to `true` to proceed. The passphrase is used as a personal authentication token alongside the PIN.",
           "required": true,
           "content": {
             "application/json": {
@@ -26,8 +26,19 @@
                 "properties": {
                   "email": {
                     "type": "string",
-                    "description": "The user's email address. This is required for sending the verification token and for communication regarding the account. It must be a valid email format (e.g., user@example.com).",
-                    "format": "email"
+                    "description": "The user's email address used for account verification and communication. It must be in a valid email format and only include the address part.",
+                    "format": "email",
+                    "example": "user@example.com"
+                  },
+                  "isConsent": {
+                    "type": "boolean",
+                    "description": "A flag indicating whether the user has agreed to data processing. This must be set to `true`. Sending `false` will result in an invalid request.",
+                    "example": true
+                  },
+                  "locale": {
+                    "type": "string",
+                    "description": "The user's preferred locale for application interaction, formatted according to BCP 47. Determines the language and format of the user interface.",
+                    "example": "en-US"
                   },
                   "name": {
                     "type": "string",
@@ -36,36 +47,22 @@
                     "minLength": 1,
                     "maxLength": 100
                   },
-                  "isConsent": {
-                    "type": "boolean",
-                    "description": "A flag indicating whether the user has agreed to data processing as per legal requirements. This consent must be true to proceed with registration.",
-                    "example": true
-                  },
-                  "locale": {
-                    "type": "string",
-                    "description": "User's preferred locale for interactions with the application. Must follow BCP 47 language tags.",
-                    "example": "en-US"
-                  },
                   "passPhrase": {
                     "type": "string",
-                    "description": "A secret passphrase chosen by the user. This passphrase will be required in combination with the PIN code for secure authentication in future interactions. The passphrase should be easy for the user to remember and spell, especially in voice-driven interfaces.",
+                    "description": "A secret passphrase chosen by the user. It serves as an authentication token along with the PIN. Passphrases must be meaningful, easy to pronounce, and suitable for voice interfaces.",
                     "minLength": 8,
                     "maxLength": 128,
                     "example": "sunny day morning"
                   }
                 },
-                "required": [
-                  "email",
-                  "isConsent",
-                  "passPhrase"
-                ]
+                "required": ["email", "isConsent", "name", "passPhrase"]
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Sign-up initiation was successful. The response includes a unique PIN code (inactive until email verification is completed) and user instructions.",
+            "description": "The sign-up process was initiated successfully. The response includes the user's PIN (inactive until email verification is completed) and instructions for the next steps.",
             "content": {
               "application/json": {
                 "schema": {
@@ -79,30 +76,26 @@
                         "SERVER_ERROR",
                         "SUCCESS"
                       ],
-                      "description": "Indicates the result of the operation. Possible values are: CONSENT_REQUIRED, EMAIL_ALREADY_REGISTERED, SERVER_ERROR, SUCCESS."
+                      "description": "Indicates the outcome of the registration initiation. Possible values are: CONSENT_REQUIRED (consent not provided), EMAIL_ALREADY_REGISTERED (email already in use), SERVER_ERROR (an internal issue), SUCCESS (registration initiated)."
                     },
                     "pin": {
                       "type": "integer",
-                      "description": "A unique 4-6 digit numeric code assigned to the user as their identifier. The PIN code remains inactive until the user verifies their email. This code should be retained by the user for future interactions.",
+                      "description": "A unique numeric PIN assigned to the user during registration. This PIN remains inactive until the user's email is verified and is required for future authentication along with the passphrase.",
                       "example": 123456
                     },
                     "instructions": {
                       "type": "string",
-                      "description": "A detailed message instructing the user on the next steps to complete their registration. This includes verifying their email by following the link sent to their email address.",
+                      "description": "Next-step instructions for the user to complete their registration. The instructions are translated into the user's preferred language.",
                       "example": "Please verify your email address by clicking the link we sent to your email."
                     }
                   },
-                  "required": [
-                    "resultCode",
-                    "pin",
-                    "instructions"
-                  ]
+                  "required": ["resultCode", "pin", "instructions"]
                 }
               }
             }
           },
           "500": {
-            "description": "Internal server error. An unexpected issue occurred while processing the request. The user should be advised to try again later.",
+            "description": "Internal server error. An unexpected issue occurred while processing the request. The user should retry later.",
             "content": {
               "application/json": {
                 "schema": {
@@ -110,7 +103,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "description": "A general error message indicating that the service is temporarily unavailable.",
+                      "description": "A message indicating that the service is temporarily unavailable.",
                       "example": "Service unavailable. Please try again later."
                     }
                   }
