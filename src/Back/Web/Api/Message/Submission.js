@@ -84,7 +84,7 @@ export default class GptUser_Back_Web_Api_Message_Submission {
                     rs.message = 'Authentication failed. Ensure your PIN and passphrase are correct, and your account is active.';
                 } else {
                     // Prepare email subject and content
-                    const emailSubject = req.subject || 'Application Submission'; // Default subject
+                    const emailSubject = req.subject || 'Message Submission'; // Default subject
                     const emailContent = `${req.messageEn}\n\n${req.messageRu}`; // Combining English and Russian messages
 
                     // Attempt to send the email
@@ -96,9 +96,7 @@ export default class GptUser_Back_Web_Api_Message_Submission {
                     });
 
                     // Update the last date
-                    const ephemeralId = context?.request?.headers[DEF.HTTP_HEAD_OPENAI_EPHEMERAL_USER_ID];
-                    await modOaiUser.updateDateLast({trx, userRef: foundUser.userRef, ephemeralId});
-
+                    await modOaiUser.updateDateLast({trx, userRef: foundUser.userRef, httpRequest: context?.request});
                     resultCode = emailSent.success ? CODE.SUCCESS : CODE.SERVICE_ERROR;
                     rs.message = resultCode === CODE.SUCCESS
                         ? 'Thank you for your message. We appreciate your cooperation and will review it shortly.'
