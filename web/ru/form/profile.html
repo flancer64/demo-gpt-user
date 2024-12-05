@@ -1,62 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Edit Profile</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Редактировать Профиль</title>
+    <link rel="stylesheet" href="../../css/forms.css">
 </head>
 <body>
 
 <div class="container">
-    <h1>Edit Profile</h1>
+    <h1>Редактировать Профиль</h1>
     <div id="loader" class="loader"></div>
+
     <form id="profileForm" style="display: none;">
-        <!-- Name (Editable) -->
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input id="name" name="name" type="text" placeholder="Enter your name">
-        </div>
+        <label for="name">Имя</label>
+        <input id="name" name="name" type="text" placeholder="Введите ваше имя">
 
-        <!-- PIN (Read-Only) -->
-        <div class="form-group">
-            <label for="pin">PIN</label>
-            <input id="pin" name="pin" type="number" readonly>
-        </div>
+        <label for="pin">PIN</label>
+        <input id="pin" name="pin" type="number" readonly>
 
-        <!-- Email (Read-Only) -->
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" readonly>
-        </div>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" readonly>
 
-        <!-- Date Created (Read-Only) -->
-        <div class="form-group">
-            <label for="dateCreated">Date Created</label>
-            <input id="dateCreated" name="dateCreated" type="text" readonly>
-        </div>
+        <label for="dateCreated">Дата создания</label>
+        <input id="dateCreated" name="dateCreated" type="text" readonly>
 
-        <!-- Status (Read-Only) -->
-        <div class="form-group">
-            <label for="status">Account Status</label>
-            <input id="status" name="status" type="text" readonly>
-        </div>
+        <label for="status">Статус аккаунта</label>
+        <input id="status" name="status" type="text" readonly>
 
-        <!-- Locale (Editable) -->
-        <div class="form-group">
-            <label for="locale">Preferred Locale</label>
-            <input id="locale" name="locale" type="text" placeholder="Enter your preferred locale (e.g., en-US)">
-        </div>
+        <label for="locale">Предпочитаемый язык</label>
+        <input id="locale" name="locale" type="text" placeholder="Введите предпочитаемый язык (например, ru-RU)">
 
-        <!-- Passphrase -->
-        <div class="form-group">
-            <label for="passphrase">New Pass Phrase</label>
-            <input id="passphrase" name="passphrase" type="text" placeholder="Enter a new pass phrase">
-        </div>
+        <label for="passphrase">Новая кодовая фраза</label>
+        <input id="passphrase" name="passphrase" type="text" placeholder="Введите новую кодовую фразу">
 
-        <!-- Submit Button -->
-        <button class="button" type="submit">Save Changes</button>
+        <button class="button" type="submit">Сохранить изменения</button>
     </form>
+
     <div id="message" class="message" style="display: none;"></div>
 </div>
 
@@ -78,7 +58,7 @@
                 return data;
             }
         } catch (error) {
-            console.error('Error fetching user data:', error);
+            console.error('Ошибка при получении данных пользователя:', error);
         }
         return null;
     }
@@ -93,7 +73,7 @@
             });
             return response.ok;
         } catch (error) {
-            console.error('Error saving user data:', error);
+            console.error('Ошибка при сохранении данных пользователя:', error);
         }
         return false;
     }
@@ -128,9 +108,9 @@
             form.querySelector('#status').value = profileData.status || '';
 
             loader.style.display = 'none';
-            form.style.display = 'block';
+            form.style.display = 'grid';
         } else {
-            message.textContent = 'Failed to load profile data. Please try again later.';
+            message.textContent = 'Не удалось загрузить данные профиля. Попробуйте позже.';
             message.style.display = 'block';
             loader.style.display = 'none';
         }
@@ -149,10 +129,10 @@
         const success = await saveUserData({token, name, locale, passphrase});
 
         if (success) {
-            message.textContent = 'Profile updated successfully!';
+            message.textContent = 'Профиль успешно обновлен!';
             message.style.color = '#6b8e23';
         } else {
-            message.textContent = 'Failed to update profile. Please try again.';
+            message.textContent = 'Не удалось обновить профиль. Попробуйте ещё раз.';
             message.style.color = '#ff4d4d';
         }
 

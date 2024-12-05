@@ -6,7 +6,9 @@ export default class GptUser_Back_Defaults {
      * Default locale for this app.
      * @type {string}
      */
-    LOCALE = 'ru';
+    LOCALE = 'en';
+
+    LOCALE_AVAILABLE = ['en', 'ru'];
 
     /**
      * NPM package name acts as the name.

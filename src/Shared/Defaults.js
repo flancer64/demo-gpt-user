@@ -15,8 +15,10 @@ export default class GptUser_Shared_Defaults {
      */
     NAME = '@flancer64/demo-gpt-user';
 
-    ROUTE_UPDATE = '/user/profile.html?token=:code';
-    ROUTE_VERIFY = '/user/signup.html?token=:code';
+    ROUTE_UPDATE = '/form/profile.html?token=:code';
+    ROUTE_VERIFY = '/form/signup.html?token=:code';
+
+    URL_CHAT = 'https://chatgpt.com/g/g-674c4df4e10481918ce5f1e3162b53fb-demoonboard';
 
     /**
      * Initializes the shared defaults.

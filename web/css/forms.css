@@ -1,0 +1,150 @@
+/* General body style to match the website theme */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0 5px 0 5px;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Container for the email verification form */
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Header styling */
+h1 {
+    font-size: 24px;
+    color: #0d1117;
+    margin-bottom: 20px;
+}
+
+/* Loader animation */
+.loader {
+    margin: 20px auto;
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #007acc;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Information section styling */
+.info {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.info .form-group {
+    margin-bottom: 15px;
+}
+
+.info label {
+    font-weight: bold;
+    color: #0d1117;
+}
+
+.info .info-cell-value {
+    display: inline-block;
+    margin-left: 10px;
+    color: #333;
+}
+
+/* Info message styling */
+.info-message {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.4;
+}
+
+/* Button styling */
+.button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007acc;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: #005f99;
+}
+
+/* Error message styling */
+#error-message {
+    margin-top: 20px;
+    color: #d32f2f;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Form grid styling */
+form {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Two columns: labels and inputs */
+    gap: 15px; /* Spacing between grid items */
+    align-items: center; /* Aligns items vertically in the center */
+    max-width: 600px; /* Restrict maximum width of the form */
+    margin: 20px auto; /* Center the form horizontally */
+    text-align: left; /* Ensure text alignment in labels */
+}
+
+/* Labels styling */
+form label {
+    text-align: right;
+    font-weight: bold;
+    color: #0d1117;
+    margin-right: 10px; /* Space between label and input */
+}
+
+/* Inputs styling */
+form input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%; /* Ensure inputs fill the available space */
+    box-sizing: border-box;
+}
+
+/* Button styling */
+form button {
+    grid-column: 1 / -1; /* Span across both columns */
+    justify-self: center;
+    padding: 10px 20px;
+    background-color: #007acc;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #005f99;
+}
+

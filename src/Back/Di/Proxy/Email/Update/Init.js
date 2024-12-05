@@ -20,6 +20,7 @@ export default class GptUser_Back_Di_Proxy_Email_SignUp_Init {
         }
     ) {
         const {SEARCH, REPLACE} = extractUrlParts();
+        const LOCALES = DEF.LOCALE_AVAILABLE;
 
         /**
          * Extracts patterns for replacing placeholders in verification links.
@@ -57,7 +58,9 @@ export default class GptUser_Back_Di_Proxy_Email_SignUp_Init {
                 const res = await originalPrepareVars(trx, user);
 
                 if (res.edit_link && typeof res.edit_link === 'string') {
-                    res.edit_link = res.edit_link.replace(SEARCH, REPLACE);
+                    const locale = (LOCALES.includes(user?.locale)) ? user.locale : DEF.LOCALE;
+                    const replace = `/${locale}${REPLACE}`;
+                    res.edit_link = res.edit_link.replace(SEARCH, replace);
                 }
 
                 if (user?.userRef) {
