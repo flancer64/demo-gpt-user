@@ -128,7 +128,7 @@
             "bearerAuth": []
           }
         ],
-        "operationId": "sendTestEmail",
+        "operationId": "emailTestSend",
         "requestBody": {
           "description": "Data required to authenticate the user and send a test email to their registered email address.",
           "required": true,
@@ -325,7 +325,7 @@
             "bearerAuth": []
           }
         ],
-        "operationId": "submitMessage",
+        "operationId": "emailOwnerSend",
         "requestBody": {
           "description": "Data required to submit a message to the business owner or support team.",
           "required": true,
