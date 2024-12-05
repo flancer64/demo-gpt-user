@@ -18,7 +18,7 @@ export default class GptUser_Shared_Defaults {
     ROUTE_UPDATE = '/form/profile.html?token=:code';
     ROUTE_VERIFY = '/form/signup.html?token=:code';
 
-    URL_CHAT = 'https://chatgpt.com/g/g-674c4df4e10481918ce5f1e3162b53fb-demoonboard';
+    URL_CHAT = 'https://chatgpt.com/g/g-6751aefcfe308191b7fb3d4a2fef049b-customgpt-integration-demo';
 
     /**
      * Initializes the shared defaults.
